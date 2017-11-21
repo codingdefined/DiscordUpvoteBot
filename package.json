@@ -4,7 +4,7 @@
   "description": "A discord Bot",
   "main": "upvotebot.js",
   "scripts": {
-    "start": "node upvotebot.js",
+    "start": "node upvote.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "engines": {
