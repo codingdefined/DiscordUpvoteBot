@@ -30,8 +30,8 @@ const UPVOTE_COMMAND = {
 
 function upvote(author, permalink, event, weightPercentage, limit) {
 	steem.broadcast.voteAsync(
-      'PrivatePostingKey',
-      'authorName',
+      process.env.STEEMKEY,
+      'unmentionable',
       author,
       permalink,
       weightPercentage,
@@ -75,7 +75,7 @@ function collectError(event, command, error) {
 }
 
 client.connect({
-    token: 'DiscordToken'
+    token: process.env.DISCORDTOKEN
 });
 
 client.Dispatcher.on(Events.GATEWAY_READY, e => {
