@@ -2,6 +2,7 @@ const Discordie = require('discordie');
 const Events = Discordie.Events;
 const steem = require('steem');
 const client = new Discordie();
+const cluster = require('cluster');
 
 function beginsWith(name) {
     return function (event) {
@@ -74,18 +75,31 @@ function collectError(event, command, error) {
         error.stack + "\n```");
 }
 
-client.connect({
-    token: process.env.DISCORDTOKEN
-});
-
-client.Dispatcher.on(Events.GATEWAY_READY, e => {
-    console.log('Connected as: ' + client.User.username);
-});
-
-client.Dispatcher.on(Events.MESSAGE_CREATE, e => {
-    if (e.message.author.bot) {
-        return;
+if (cluster.isMaster) {
+    console.log(`Master ${process.pid} is running`);
+    // Fork workers.
+    for (let i = 0; i < 1; i++) {
+        cluster.fork();
     }
-    checkCommands(e);
-});
+    cluster.on('exit', (worker, code, signal) => {
+        console.log(`worker ${worker.process.pid} died`);
+        cluster.fork();
+    });
+} else {
+    console.log(`Worker ${process.pid} started`);
 
+    client.connect({
+        token: process.env.DISCORDTOKEN
+    });
+
+    client.Dispatcher.on(Events.GATEWAY_READY, e => {
+        console.log('Connected as: ' + client.User.username);
+    });
+
+    client.Dispatcher.on(Events.MESSAGE_CREATE, e => {
+        if (e.message.author.bot) {
+            return;
+        }
+        checkCommands(e);
+    });
+}
