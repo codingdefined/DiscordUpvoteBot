@@ -30,7 +30,8 @@ const UPVOTE_COMMAND = {
 };
 
 function upvote(author, permalink, event, weightPercentage, limit) {
-	steem.broadcast.voteAsync(
+try{
+      steem.broadcast.voteAsync(
       process.env.STEEMKEY,
       process.env.STEEMAUTHOR,
       author,
@@ -42,6 +43,10 @@ function upvote(author, permalink, event, weightPercentage, limit) {
         if(result)
           event.message.channel.sendMessage('Done! @' + author + ' post has received a ' + limit + '% upvote from @unmentionable!');
       })
+    }
+    catch (error){
+        event.message.channel.sendMessage('Not able to vote now ' + error);
+    }
 }
 
 const COMMANDS = [UPVOTE_COMMAND];
