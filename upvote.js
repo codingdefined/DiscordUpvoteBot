@@ -93,6 +93,8 @@ if (cluster.isMaster) {
 } else {
     console.log(`Worker ${process.pid} started`);
 
+    steem.api.setOptions({url: 'https://api.steemit.com'});
+	
     client.connect({
         token: process.env.DISCORDTOKEN
     });
