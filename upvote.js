@@ -31,7 +31,7 @@ const UPVOTE_COMMAND = {
 
 function upvote(author, permalink, event, weightPercentage, limit) {
 try{
-      steem.broadcast.vote(
+      steem.broadcast.voteAsync(
       process.env.STEEMKEY,
       process.env.STEEMAUTHOR,
       author,
