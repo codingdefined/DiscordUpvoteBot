@@ -42,7 +42,9 @@ try{
           event.message.channel.sendMessage('Not able to vote now ' + err);
         if(result)
           event.message.channel.sendMessage('Done! @' + author + ' post has received a ' + limit + '% upvote from @unmentionable!');
-      })
+      }).catch(function() {
+          event.message.channel.sendMessage('Error Try Again later ' + err);
+      });
     }
     catch (error){
         event.message.channel.sendMessage('Not able to vote now ' + error);
